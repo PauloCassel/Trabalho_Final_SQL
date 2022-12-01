@@ -1,12 +1,12 @@
 use lol;
 
-/* 1, 2, 3, 4 */
-
+/* Tabela de times */
 create table times (
 id_do_time INT PRIMARY KEY NOT NULL,
 nome_do_time VARCHAR(50) NOT NULL
 );
 
+/* Tabela de patrocinadores */
 create table patrocinadores (
 id_da_marca INT PRIMARY KEY NOT NULL,
 nome_da_marca VARCHAR(50) NOT NULL,
@@ -15,7 +15,7 @@ patrocinio REAL NOT NULL,
 id_do_time INT NOT NULL
 );
 
-
+/* Tabela de partidas */
 CREATE TABLE partidas (
 id_da_partida INT PRIMARY KEY NOT NULL,
 id_do_anfitriao INT NOT NULL,
@@ -23,11 +23,13 @@ id_do_visitante INT NOT NULL,
 data_da_partida VARCHAR(50) NOT NULL
 );
 
+/* Tabela de personagens */
 CREATE TABLE personagens (
 id_do_personagem INT(5) PRIMARY KEY NOT NULL,
 nome_do_personagem VARCHAR(50) NOT NULL
 );
 
+/* Tabela de jogadores */
 CREATE TABLE jogadores (
 id_do_jogador INT PRIMARY KEY NOT NULL,
 nome_do_jogador VARCHAR(50) NOT NULL,
@@ -35,6 +37,7 @@ id_do_time INT NOT NULL,
 id_do_personagem INT NOT NULL
 );
 
+/* Tabela de vencedor */
 CREATE TABLE vencedor (
 id_da_partida INT PRIMARY KEY NOT NULL,
 id_do_time INT NOT NULL,
@@ -42,6 +45,7 @@ nome_do_time VARCHAR(50) NOT NULL,
 premio REAL NOT NULL
 );
 
+/* Tabela de itens */
 CREATE TABLE itens (
 id_do_item INT PRIMARY KEY NOT NULL,
 nome_do_item VARCHAR(50) NOT NULL,
@@ -112,17 +116,22 @@ SELECT jogadores.nome_do_jogador, nome_do_time FROM jogadores INNER JOIN times O
 SELECT personagens.nome_do_personagem, jogadores.nome_do_jogador FROM personagens INNER JOIN jogadores ON jogadores.id_do_personagem = personagens.id_do_personagem ORDER BY id_do_jogador DESC;
 
 /* 10 Funções Matemáticas */
-
+/* ver o valor máximo da tabela premio(vencedor) */
 SELECT MAX(premio) FROM vencedor;
+/* ver o valor médio da tabela premio(vencedor) */
 SELECT AVG(premio) FROM vencedor;
+/* ver o valor minimo da tabela preco(itens) */
 SELECT MIN(preco) FROM itens;
+/* ver o valor médio da tabela preco(itens) */
 SELECT AVG(preco) FROM itens;
+/* ver o valor máximo da tabela patrocinio(patrocinadores) */
 SELECT MAX(patrocinio) FROM patrocinadores;
+/* ver o valor minimo da tabela patrocinio(patrocinadores) */
 SELECT MIN(patrocinio) FROM patrocinadores;
+/* ver o valor médio da tabela patrocinio(patrocinadores) */
 SELECT AVG(patrocinio) FROM patrocinadores;
 
-/* 11 Visões */
-
+/* 11 Views */
 CREATE VIEW maior_patrocinio AS SELECT MAX(patrocinio) FROM patrocinadores;
 SELECT * FROM maior_patrocinio;
 
@@ -139,7 +148,6 @@ CREATE VIEW menor_premio AS SELECT MIN(premio) FROM vencedor;
 SELECT * FROM menor_premio;
 
 /* 12 Savepoints */
-
 START transaction;
 INSERT INTO personagens VALUES
 ('316', "K'Sante");
@@ -170,7 +178,6 @@ SAVEPOINT novo_patrocinador;
 ROLLBACK TO novo_patrocinador;
 
 /* 13 Usuarios */
-
 CREATE USER paulo@localhost;
 CREATE USER marcelo@localhost IDENTIFIED BY '1144';
 CREATE USER anne@localhost IDENTIFIED BY '1234';
@@ -179,13 +186,14 @@ DROP USER paulo@localhost;
 DROP USER marcelo@localhost;
 DROP USER anne@localhost;
 
+/* dando a permissão de ver as views para o úsuario paulo */
 GRANT ALL ON lol.maior_patrocinio TO paulo@localhost;
 GRANT ALL ON lol.item_mais_caro TO paulo@localhost;
 GRANT ALL ON lol.maior_premio TO paulo@localhost;
 GRANT ALL ON lol.menor_premio TO paulo@localhost;
 GRANT ALL ON lol.media_preco_itens TO paulo@localhost;
 
-
+/* dando a permissão de inserir dados e ver para o úsuario marcelo */
 GRANT INSERT ON lol.itens TO marcelo@localhost;
 GRANT INSERT ON lol.patrocinadores TO marcelo@localhost;
 GRANT INSERT ON lol.times TO marcelo@localhost;
@@ -194,7 +202,7 @@ GRANT INSERT ON lol.personagens TO marcelo@localhost;
 GRANT INSERT ON lol.partidas TO marcelo@localhost;
 GRANT INSERT ON lol.jogadores TO marcelo@localhost;
 
-
+/* dando a permissão de ver os dados para o úsuario anne */
 GRANT SELECT ON lol.itens TO anne@localhost;
 GRANT SELECT ON lol.patrocinadores TO anne@localhost;
 GRANT SELECT ON lol.times TO anne@localhost;
