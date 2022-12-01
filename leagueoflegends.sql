@@ -1,12 +1,13 @@
 use lol;
 
-/* Tabela de times */
+/* Tabela de times, possui "id_do_time" como chave principal, e "nome_do_time" */
 create table times (
 id_do_time INT PRIMARY KEY NOT NULL,
 nome_do_time VARCHAR(50) NOT NULL
 );
 
-/* Tabela de patrocinadores */
+/* Tabela de patrocinadores, possui "id_da_marca" como chave principal, e também possui "nome_da_marca",
+"moeda", "patrocinio" e "id_do_time" */
 create table patrocinadores (
 id_da_marca INT PRIMARY KEY NOT NULL,
 nome_da_marca VARCHAR(50) NOT NULL,
@@ -15,7 +16,8 @@ patrocinio REAL NOT NULL,
 id_do_time INT NOT NULL
 );
 
-/* Tabela de partidas */
+/* Tabela de partidas, possui "id_da_partida" como chave princpal, e também possui "id_do_anfitriao",
+"id_do_visitante" e "data_da_partida" */
 CREATE TABLE partidas (
 id_da_partida INT PRIMARY KEY NOT NULL,
 id_do_anfitriao INT NOT NULL,
@@ -23,13 +25,13 @@ id_do_visitante INT NOT NULL,
 data_da_partida VARCHAR(50) NOT NULL
 );
 
-/* Tabela de personagens */
+/* Tabela de personagens, possui "id_do_personagem" como chave principal, e também possui "nome_do_personagem" */
 CREATE TABLE personagens (
 id_do_personagem INT(5) PRIMARY KEY NOT NULL,
 nome_do_personagem VARCHAR(50) NOT NULL
 );
 
-/* Tabela de jogadores */
+/* Tabela de jogadores, possui como chave principal "id_do_jogador", e também possui "nome_do_jogador", "id_do_time" e "id_do_personagem" */
 CREATE TABLE jogadores (
 id_do_jogador INT PRIMARY KEY NOT NULL,
 nome_do_jogador VARCHAR(50) NOT NULL,
@@ -37,7 +39,8 @@ id_do_time INT NOT NULL,
 id_do_personagem INT NOT NULL
 );
 
-/* Tabela de vencedor */
+/* Tabela de vencedor, possui "id_da_partida" como chave principal, e também possui "id_do_time",
+"nome_do_time" e "premio" */
 CREATE TABLE vencedor (
 id_da_partida INT PRIMARY KEY NOT NULL,
 id_do_time INT NOT NULL,
@@ -45,7 +48,8 @@ nome_do_time VARCHAR(50) NOT NULL,
 premio REAL NOT NULL
 );
 
-/* Tabela de itens */
+/* Tabela de itens, possui "id_do_time" como chave principal, e também possui "nome_do_time", "preco",
+"id_do_personagem" */
 CREATE TABLE itens (
 id_do_item INT PRIMARY KEY NOT NULL,
 nome_do_item VARCHAR(50) NOT NULL,
@@ -68,52 +72,82 @@ ALTER TABLE jogador ADD CONSTRAINT FK_JOGADORES_PERSONAGENS FOREIGN KEY
 (id_do_personagem) REFERENCES personagens(id_do_personagem) ON DELETE CASCADE;
 
 /* 6 - Joins */
+
+/* Selecionar "nome_do_time" da Tabela TIMES e "premio" da tabela VENCEDOR 
+onde "id_do_time" da tabela TIME for igual a "id_do_time da tabela VENCEDOR */
 SELECT times.nome_do_time, premio FROM times INNER JOIN vencedor
 ON times.id_do_time = vencedor.id_do_time;
 
+/* Selecionar "nome_do_time" da tabela JOGADORES e "nome_do_time" da tabela TIMES
+onde "id_do_time da tabela JOGADORES for igual a "id_do_time" da tabela TIMES */
 SELECT jogadores.nome_do_jogador, nome_do_time FROM jogadores INNER JOIN times
 ON jogadores.id_do_time = times.id_do_time;
 
+/* Selecionar "nome_do_personagem" da tabela PERSONAGENS e "nome_do_jogador" da tabela JOGADORES
+onde "id_do_personagem" da tabela JOGADORES for igual a "id_do_personagem" da tabela PERSONAGENS */
 SELECT personagens.nome_do_personagem, jogadores.nome_do_jogador FROM personagens INNER JOIN jogadores
 ON jogadores.id_do_personagem = personagens.id_do_personagem;
 
+/* Selecionar "nome_do_item" da tabela ITENS e "nome_do_personagem" da tabela PERSONAGENS
+onde "id_do_personagem" da tabela ITENS for igual a "id_do_personagem" da tabela PERSONAGENS */
 SELECT itens.nome_do_item, nome_do_personagem FROM itens INNER JOIN personagens
 ON itens.id_do_personagem = personagens.id_do_personagem;
 
+/* Selecionar "nome_da_marca" da tabela PATROCINADORES e "nome_do_time" da tabela TIMES
+onde "id_do_time" da tabela PATROCINADORES for igual a "id_do_time" da tabela TIMES */
 SELECT patrocinadores.nome_da_marca, nome_do_time FROM patrocinadores INNER JOIN times
 ON patrocinadores.id_do_time = times.id_do_time;
 
 /* 7 Order By */
 
+/* Selecionar "patrocinio" da tabela PATROCINADORES em ordem decrescente */
 SELECT patrocinio FROM patrocinadores ORDER BY patrocinio DESC;
 
+/* Selecionar "premio" da tabela VENCEDOR em ordem crescente */
 SELECT premio FROM vencedor ORDER BY premio ASC;
 
+/* Selecionar "id_do_time" e "id_da_partida" da tabela VENCEDOR em ordem decrescente */
 SELECT id_do_time, id_da_partida FROM vencedor ORDER BY id_da_partida DESC;
 
+/* Selecionar "nome_do_item" e "preco" da tabela ITENS em ordem decrescente */
 SELECT nome_do_item, preco FROM itens ORDER BY preco DESC;
 
+/* Selecionar "id_do_jogador" e "id_do_personagem" da tabela JOGADORES em ordem decrescente */
 SELECT id_do_jogador, id_do_personagem FROM jogadores ORDER BY id_do_jogador DESC;
 
 /* 8 Group By */
 
+/* Selecionar "id_do_anfitrião" e "id_do_visitante da tabela PARTIDAS agrupado por "id_do_anfitriao" */
 SELECT id_do_anfitriao, id_do_visitante FROM partidas GROUP BY id_do_anfitriao;
 
+/* Selecionar "nome_do_item" e "id_do_item" da tabela ITENS agrupado por "id_do_item" */
 SELECT nome_do_item, id_do_item FROM itens GROUP BY id_do_item;
 
+/* Selecionar "nome_do_time" e "id_do_time" da tabela TIMES agrupado por "id_do_time" */
 SELECT nome_do_time, id_do_time FROM times GROUP BY id_do_time;
 
+/* Selecionar "id_da_partida" e "data_da_partida" da tabela PARTIDAS agrupado por "id_da_partida */
 SELECT nome_do_time, premio FROM vencedor GROUP BY id_do_time;
 
+/* Selecionar "id_da_partida" e "data_da_partida" da tabela PARTIDAS agrupado por "id_da_partida" */
 SELECT id_da_partida, data_da_partida FROM partidas GROUP BY id_da_partida;
 
 /* 9 Join e Order By */
 
-SELECT times.nome_do_time, premio FROM times INNER JOIN vencedor ON times.id_do_time = vencedor.id_do_time ORDER BY premio ASC;
+/* Selecionar "nome_do_time" da tabela TIMES e "premio" da tabela VENCEDOR
+onde "id_do_time" da tabela TIMES for igual a "id_do_time da tabela VENCEDOR em ordem crescente */ 
+SELECT times.nome_do_time, premio FROM times INNER JOIN vencedor
+ON times.id_do_time = vencedor.id_do_time ORDER BY premio ASC;
 
-SELECT jogadores.nome_do_jogador, nome_do_time FROM jogadores INNER JOIN times ON jogadores.id_do_time = times.id_do_time ORDER BY times.id_do_time DESC;
+/* Selecionar "nome_do_jogador" da tabela JOGADORES e "nome_do_time" da tabela TIMES
+onde "id_do_time" da tabela JOGADORES for igual a "id_do_time" da tabela TIMES em ordem decrescente */
+SELECT jogadores.nome_do_jogador, nome_do_time FROM jogadores INNER JOIN times 
+ON jogadores.id_do_time = times.id_do_time ORDER BY times.id_do_time DESC;
 
-SELECT personagens.nome_do_personagem, jogadores.nome_do_jogador FROM personagens INNER JOIN jogadores ON jogadores.id_do_personagem = personagens.id_do_personagem ORDER BY id_do_jogador DESC;
+/* Selecionar "nome_do_jogador" da tabela PERSONAGENS e "nome_do_jogador" da tabela JOGADORES
+onde "id_do_personagem" de JOGADORES e "id_do_personagem" da tabela PERSONAGENS em ordem decrescente */
+SELECT personagens.nome_do_personagem, jogadores.nome_do_jogador FROM personagens INNER JOIN jogadores 
+ON jogadores.id_do_personagem = personagens.id_do_personagem ORDER BY id_do_jogador DESC;
 
 /* 10 Funções Matemáticas */
 /* ver o valor máximo da tabela premio(vencedor) */
@@ -132,6 +166,8 @@ SELECT MIN(patrocinio) FROM patrocinadores;
 SELECT AVG(patrocinio) FROM patrocinadores;
 
 /* 11 Views */
+
+/* Não tem muito o que explicar */
 CREATE VIEW maior_patrocinio AS SELECT MAX(patrocinio) FROM patrocinadores;
 SELECT * FROM maior_patrocinio;
 
@@ -148,6 +184,8 @@ CREATE VIEW menor_premio AS SELECT MIN(premio) FROM vencedor;
 SELECT * FROM menor_premio;
 
 /* 12 Savepoints */
+
+/* Basicamente colocando valores nas tabelas */
 START transaction;
 INSERT INTO personagens VALUES
 ('316', "K'Sante");
