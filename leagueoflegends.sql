@@ -111,7 +111,7 @@ SELECT id_da_partida, data_da_partida FROM partidas GROUP BY id_da_partida;
 
 SELECT times.nome_do_time, premio FROM times INNER JOIN vencedor ON times.id_do_time = vencedor.id_do_time ORDER BY premio ASC;
 
-SELECT jogadores.nome_do_jogador, nome_do_time FROM jogadores INNER JOIN times ON jogadores.id_do_time = times.id_do_time ORDER BY id_do_time DESC;
+SELECT jogadores.nome_do_jogador, nome_do_time FROM jogadores INNER JOIN times ON jogadores.id_do_time = times.id_do_time ORDER BY times.id_do_time DESC;
 
 SELECT personagens.nome_do_personagem, jogadores.nome_do_jogador FROM personagens INNER JOIN jogadores ON jogadores.id_do_personagem = personagens.id_do_personagem ORDER BY id_do_jogador DESC;
 
